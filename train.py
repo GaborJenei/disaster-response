@@ -4,9 +4,15 @@ import sqlalchemy
 
 # NLP
 import re
-from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem.wordnet import WordNetLemmatizer
+from nltk.corpus import stopwords
+
+import nltk
+
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
 
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
@@ -15,6 +21,7 @@ from sklearn.multioutput import MultiOutputClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.pipeline import Pipeline
+from sklearn.metrics import classification_report
 
 # load data from database
 engine = sqlalchemy.create_engine('sqlite:///DisasterResponse.db')
@@ -46,7 +53,7 @@ def tokenize(text):
     tokens = word_tokenize(text)
 
     # Remove stop words
-    tokens = [w for w in tokens if w not in stopwords.words('English')]
+    tokens = [w for w in tokens if w not in stopwords.words('english')]
 
     # Lemmatise - TODO add parameters to lemmatize verbs, nouns or verbs + nouns
     lemmatizer = WordNetLemmatizer()
@@ -65,7 +72,7 @@ def tokenize(text):
 pipeline = Pipeline([
     ('vect', CountVectorizer(tokenizer=tokenize)),
     ('tfidf', TfidfTransformer()),
-    ('clf', MultiOutputClassifier(KNeighborsClassifier())),
+    ('clf', MultiOutputClassifier(KNeighborsClassifier(n_jobs=12))),
 ])
 
 # Train the model
@@ -73,3 +80,5 @@ X_train, X_test, y_train, y_test = train_test_split(X, Y)
 
 # train classifier
 pipeline.fit(X_train, y_train)
+
+y_pred = pipeline.predict(X_test)

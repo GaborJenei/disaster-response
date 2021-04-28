@@ -3,10 +3,10 @@ import pandas as pd
 import sqlalchemy
 
 # load messages dataset
-messages = pd.read_csv('messages.csv')
+messages = pd.read_csv('data/disaster_messages.csv')
 
 # load categories dataset
-categories = pd.read_csv('categories.csv')
+categories = pd.read_csv('data/disaster_categories.csv')
 
 # merge datasets
 df = messages.merge(categories, on=['id'], how='left')
