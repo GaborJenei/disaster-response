@@ -85,7 +85,7 @@ def save_data(df, database_filename):
         Returns
             None (saved db file)
     """
-    engine = sqlalchemy.create_engine('sqlite:///' + database_filename + '.db')
+    engine = sqlalchemy.create_engine('sqlite:///' + database_filename)
     df.to_sql('messages', engine, index=False, if_exists='replace')
 
 
