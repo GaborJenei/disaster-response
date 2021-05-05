@@ -1,6 +1,7 @@
 import re
 
 import pandas as pd
+from sklearn import preprocessing
 from sklearn.base import BaseEstimator, TransformerMixin
 from nltk.tokenize import word_tokenize, TweetTokenizer
 from nltk.stem.wordnet import WordNetLemmatizer
@@ -57,4 +58,10 @@ class MessageLength(BaseEstimator, TransformerMixin):
     def transform(self, X):
         # apply word_count function to all values in X
         x_word_count = pd.Series(X).apply(self.word_count)
-        return pd.DataFrame(x_word_count)
+
+        # TODO fix this: Normalise the numbers
+        x = x_word_count.values
+        min_max_scaler = preprocessing.MinMaxScaler()
+        x_scaled = min_max_scaler.fit_transform(x)
+        df_out = pd.DataFrame(x_scaled)
+        return df_out
