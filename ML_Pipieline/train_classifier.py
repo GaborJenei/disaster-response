@@ -38,17 +38,20 @@ def load_data(db_filepath):
     df = pd.read_sql("SELECT * FROM messages", engine)
     x = df['message'].values
 
-    category_names = ['related', 'request', 'offer', 'aid_related', 'medical_help', 'medical_products', 'search_and_rescue',
-                  'security', 'military', 'water', 'food', 'shelter', 'clothing', 'money',
-                  'missing_people', 'refugees', 'death', 'other_aid', 'infrastructure_related', 'transport',
-                  'buildings', 'electricity', 'tools', 'hospitals', 'shops', 'aid_centers', 'other_infrastructure',
-                  'weather_related', 'floods', 'storm', 'fire', 'earthquake', 'cold', 'other_weather', 'direct_report']
+    category_names = ['related', 'request', 'offer', 'aid_related', 'medical_help', 'medical_products',
+                      'search_and_rescue', 'security', 'military', 'water', 'food', 'shelter','clothing', 'money',
+                      'missing_people', 'refugees', 'death', 'other_aid', 'infrastructure_related', 'transport',
+                      'buildings', 'electricity', 'tools', 'hospitals', 'shops', 'aid_centers', 'other_infrastructure',
+                      'weather_related', 'floods', 'storm', 'fire', 'earthquake', 'cold', 'other_weather',
+                      'direct_report']
 
     y = df[category_names].values
 
     return x, y, category_names
 
-
+# LinearSVC n_jobs=12 -> 275s ~ 5min
+# LinearSVC n_jobs=1 -> 337s ~ ?min
+# SVC Gridsearch ~6.37hours
 def build_model():
     pipeline = Pipeline([
         ('features', FeatureUnion([
@@ -60,19 +63,19 @@ def build_model():
             ('message_len', MessageLength())
 
         ])),
-        ('clf', MultiOutputClassifier(LinearSVC())),
+        ('clf', MultiOutputClassifier(SVC(max_iter=2500), n_jobs=12)),
     ])
 
     # Parameters
-    # parameters = {
-    #               'clf__estimator__kernel': ['linear', 'poly', 'rbf', 'sigmoid'],
-    #               'clf__estimator__C': [0.1, 0.5, 0.75, 1.0, 2.5, 5],
-    #               'clf__estimator__degree': [1, 2, 3, 4]
-    #               }
-
     parameters = {
-        'clf__estimator__C': [10],
-    }
+                  'clf__estimator__kernel': ['linear', 'poly', 'rbf', 'sigmoid'],
+                  'clf__estimator__C': [0.1, 0.5, 0.75, 1.0, 2.5, 5],
+                  'clf__estimator__degree': [1, 2, 3, 4]
+                  }
+
+    # parameters = {
+    #     'clf__estimator__C': [10],
+    # }
 
     pipeline_svm_cv = GridSearchCV(pipeline, param_grid=parameters, scoring='f1_micro', cv=3)
 
@@ -130,6 +133,10 @@ X_train, X_test, y_train, y_test = train_test_split(X, y)
 
 pipeline_svm = build_model()
 pipeline_svm.fit(X_train, y_train)
+fit_time = time.time()
+
+print('\n Pipeline GridSearch Fit time:')
+print(fit_time - start_time)
 
 print(y_train.size)
 print(len(y_train))
