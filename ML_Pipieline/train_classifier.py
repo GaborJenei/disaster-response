@@ -1,3 +1,4 @@
+import pickle
 import time
 
 import numpy as np
@@ -35,17 +36,17 @@ def load_data(db_filepath):
     # load data from database
     engine = sqlalchemy.create_engine('sqlite:///' + db_filepath)
     df = pd.read_sql("SELECT * FROM messages", engine)
-    x = (df['message'] + ', ' + df['genre']).values
+    x = df['message'].values
 
-    categories = ['related', 'request', 'offer', 'aid_related', 'medical_help', 'medical_products', 'search_and_rescue',
+    category_names = ['related', 'request', 'offer', 'aid_related', 'medical_help', 'medical_products', 'search_and_rescue',
                   'security', 'military', 'water', 'food', 'shelter', 'clothing', 'money',
                   'missing_people', 'refugees', 'death', 'other_aid', 'infrastructure_related', 'transport',
                   'buildings', 'electricity', 'tools', 'hospitals', 'shops', 'aid_centers', 'other_infrastructure',
                   'weather_related', 'floods', 'storm', 'fire', 'earthquake', 'cold', 'other_weather', 'direct_report']
 
-    y = df[categories].values
+    y = df[category_names].values
 
-    return x, y, categories
+    return x, y, category_names
 
 
 def build_model():
@@ -65,12 +66,12 @@ def build_model():
     # Parameters
     # parameters = {
     #               'clf__estimator__kernel': ['linear', 'poly', 'rbf', 'sigmoid'],
-    #               'clf__estimator__C': [0.5, 0.75, 1.0, 2.5],
+    #               'clf__estimator__C': [0.1, 0.5, 0.75, 1.0, 2.5, 5],
     #               'clf__estimator__degree': [1, 2, 3, 4]
     #               }
 
     parameters = {
-        'clf__estimator__C': [0.1],
+        'clf__estimator__C': [10],
     }
 
     pipeline_svm_cv = GridSearchCV(pipeline, param_grid=parameters, scoring='f1_micro', cv=3)
@@ -96,7 +97,7 @@ def evaluate_model(model, x_test, y_test):
 
     f1_scores = []
     for i, _ in enumerate(y_test):
-        f1_scores.append(f1_score(y_test[:, i], y_pred[:, i], zero_division=1))
+        f1_scores.append(f1_score(y_test[:, i-1], y_pred[:, i-1], zero_division=1))
 
     min_f1 = np.min(f1_scores)
     avg_f1 = np.mean(f1_scores)
@@ -129,6 +130,10 @@ X_train, X_test, y_train, y_test = train_test_split(X, y)
 
 pipeline_svm = build_model()
 pipeline_svm.fit(X_train, y_train)
+
+print(y_train.size)
+print(len(y_train))
+
 evaluate_model(pipeline_svm, X_test, y_test)
 
 end_time = time.time()

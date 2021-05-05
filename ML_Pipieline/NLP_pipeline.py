@@ -9,17 +9,18 @@ from nltk.corpus import stopwords
 
 def tokenize(text):
 
-    genre = text.split()[-1]
+    # genre = text.split()[-1]
+    #
+    # if genre=='social':
+    #     tokenizer = TweetTokenizer(reduce_len=True, strip_handles=True)
 
-    if genre=='social':
-        tokenizer = TweetTokenizer(reduce_len=True, strip_handles=True)
     text = text.lower()
 
     url_regex = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
-    www_regex = 'www.*'
+    # www_regex = 'www.*'
 
     text = re.sub(url_regex, "url_placeholder", text)
-    text = re.sub(www_regex, "url_placeholder", text)
+    # text = re.sub(www_regex, "url_placeholder", text)
     text = re.sub(r'[^a-zA-Z0-9]', " ", text)
 
     # tokenize text
