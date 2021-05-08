@@ -47,7 +47,6 @@ class MessageLength(BaseEstimator, TransformerMixin):
     Transformer taking a column of strings, and converting them into a column
     of integers, representing the word count of each string.
     """
-
     def word_count(self, text):
         # tokenize by words, how many words in message
         return len(tokenize(text))
@@ -59,9 +58,6 @@ class MessageLength(BaseEstimator, TransformerMixin):
         # apply word_count function to all values in X
         x_word_count = pd.Series(X).apply(self.word_count)
 
-        # TODO fix this: Normalise the numbers
-        x = x_word_count.values
-        min_max_scaler = preprocessing.MinMaxScaler()
-        x_scaled = min_max_scaler.fit_transform(x)
-        df_out = pd.DataFrame(x_scaled)
-        return df_out
+        x_word_count_norm = x_word_count / x_word_count.max()
+
+        return x_word_count_norm.values.reshape((-1,1))

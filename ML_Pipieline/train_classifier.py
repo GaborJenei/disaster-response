@@ -57,20 +57,20 @@ def build_model():
         ('features', FeatureUnion([
 
             ('text_pipeline', Pipeline([
-                ('vect', CountVectorizer(tokenizer=tokenize)),
+                ('vect', CountVectorizer(tokenizer=tokenize, min_df=2)),
                 ('tfidf', TfidfTransformer())
             ])),
             ('message_len', MessageLength())
 
         ])),
-        ('clf', MultiOutputClassifier(SVC(max_iter=2500), n_jobs=12)),
+        ('clf', MultiOutputClassifier(SVC(), n_jobs=12)),  #  max_iter=2500
     ])
 
     # Parameters
     parameters = {
-                  'clf__estimator__kernel': ['linear', 'poly', 'rbf', 'sigmoid'],
-                  'clf__estimator__C': [0.1, 0.5, 0.75, 1.0, 2.5, 5],
-                  'clf__estimator__degree': [1, 2, 3, 4]
+                  'clf__estimator__kernel': ['linear', 'poly', 'rbf', 'sigmoid'],  # , 'rbf', 'sigmoid'
+                  'clf__estimator__C': [0.1, 0.5, 1.0, 2.5, 5],  # , 2.5, 5
+                  'clf__estimator__degree': [2, 3, 4]   # , 4
                   }
 
     # parameters = {
@@ -95,19 +95,28 @@ def build_model():
 #     return model
 
 
-def evaluate_model(model, x_test, y_test):
-    y_pred = model.predict(x_test)
+def evaluate_model(model, x_test, y_test, category_names):
+    """
+    output: prints classification report
+    """
 
-    f1_scores = []
-    for i, _ in enumerate(y_test):
-        f1_scores.append(f1_score(y_test[:, i-1], y_pred[:, i-1], zero_division=1))
+    y_pred = model.predict(X_test)
+    report = classification_report(y_test, y_pred, target_names=category_names)
+    print(report)
+    return report
 
-    min_f1 = np.min(f1_scores)
-    avg_f1 = np.mean(f1_scores)
-    max_f1 = np.max(f1_scores)
-
-    print('Trained Model\n\tMin f1 score - {}\n\tAvg f1 score - {}\n\tMax f1 score - {}'.format(min_f1, avg_f1, max_f1))
-    print("\nBest Parameters:", model.best_params_)
+    # y_pred = model.predict(x_test)
+    #
+    # f1_scores = []
+    # for i, _ in enumerate(y_test):
+    #     f1_scores.append(f1_score(y_test[:, i-1], y_pred[:, i-1], zero_division=1))
+    #
+    # min_f1 = np.min(f1_scores)
+    # avg_f1 = np.mean(f1_scores)
+    # max_f1 = np.max(f1_scores)
+    #
+    # print('Trained Model\n\tMin f1 score - {}\n\tAvg f1 score - {}\n\tMax f1 score - {}'.format(min_f1, avg_f1, max_f1))
+    # print("\nBest Parameters:", model.best_params_)
 
 
 def save_model(model, model_filepath):
@@ -129,7 +138,14 @@ def save_model(model, model_filepath):
 
 
 X, y, categories = load_data('disaster_response.db')
-X_train, X_test, y_train, y_test = train_test_split(X, y)
+
+# try to push it through 20% of the data?
+sub_set = int(len(X)*1)
+X_reduced = X[:sub_set]
+y_reduced = y[:sub_set]
+
+X_train, X_test, y_train, y_test = train_test_split(X_reduced, y_reduced)
+
 
 pipeline_svm = build_model()
 pipeline_svm.fit(X_train, y_train)
@@ -141,8 +157,11 @@ print(fit_time - start_time)
 print(y_train.size)
 print(len(y_train))
 
-evaluate_model(pipeline_svm, X_test, y_test)
+print(pipeline_svm.best_estimator_.steps)
+
+evaluate_model(pipeline_svm, X_test, y_test, categories)
+
 
 end_time = time.time()
-print(start_time - end_time)
+print(end_time-start_time)
 # y_pred = pipeline_svm.predict(X_test)
