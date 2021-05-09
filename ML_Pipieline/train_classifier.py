@@ -33,6 +33,18 @@ start_time = time.time()
 
 
 def load_data(db_filepath):
+    """
+    Loads Data from SQL database
+
+        Parameters
+            database_filename(str): file path and file name of database
+
+        Returns
+            tuple of
+             - x: numpy array of messages
+             - y: numpy array of labels
+             - category_names: list of str holding the category names
+    """
     # load data from database
     engine = sqlalchemy.create_engine('sqlite:///' + db_filepath)
     df = pd.read_sql("SELECT * FROM messages", engine)
@@ -49,10 +61,19 @@ def load_data(db_filepath):
 
     return x, y, category_names
 
-# LinearSVC n_jobs=12 -> 275s ~ 5min
-# LinearSVC n_jobs=1 -> 337s ~ ?min
-# SVC Gridsearch ~6.37hours
+
 def build_model():
+    """
+    Build ML Pipeline and train GridSearchCV
+
+        Parameters
+            None
+
+        Returns
+            GridSearchCV object
+    """
+
+    # Pipeline
     pipeline = Pipeline([
         ('features', FeatureUnion([
 
@@ -63,41 +84,55 @@ def build_model():
             ('message_len', MessageLength())
 
         ])),
-        ('clf', MultiOutputClassifier(SVC(), n_jobs=12)),  #  max_iter=2500
+        ('clf', MultiOutputClassifier(SVC(), n_jobs=12)),
     ])
 
     # Parameters
     parameters = {
-                  'clf__estimator__kernel': ['linear', 'poly', 'rbf', 'sigmoid'],  # , 'rbf', 'sigmoid'
-                  'clf__estimator__C': [0.1, 0.5, 1.0, 2.5, 5],  # , 2.5, 5
-                  'clf__estimator__degree': [2, 3, 4]   # , 4
+                  'clf__estimator__kernel': ['linear', 'poly', 'rbf', 'sigmoid'],
+                  'clf__estimator__C': [0.5, 1.0, 2.5, 5]
                   }
 
-    # parameters = {
-    #     'clf__estimator__C': [10],
-    # }
-
-    pipeline_svm_cv = GridSearchCV(pipeline, param_grid=parameters, scoring='f1_micro', cv=3)
+    pipeline_svm_cv = GridSearchCV(pipeline, param_grid=parameters, scoring='f1_micro', cv=3, verbose=3)
 
     return pipeline_svm_cv
 
 
-# def train(X, y, model):
-#     # train test split
-#     X_train, X_test, y_train, y_test = train_test_split(X, y)
-#
-#     # fit model
-#     model.fit(X_train, y_train)
-#
-#     # output model test results
-#
-#
-#     return model
+def train(x, y, model):
+    """
+    Train Model with given x and y
+
+        Parameters
+            x: numpy array of features
+            y: numpy array of labels
+            model: Estimator (ML model, Pipeline, GridSearchCV) with a .fit method
+
+        Returns
+            model estimator object
+    """
+    # train test split
+    x_train, x_test, y_train, y_test = train_test_split(x, y)
+
+    # fit model
+    model.fit(x_train, y_train)
+
+    # output model test results
+    return model
 
 
 def evaluate_model(model, x_test, y_test, category_names):
     """
-    output: prints classification report
+    Evaluates Estimator
+
+        Parameters
+            x_test: numpy array of test features
+            y_test: numpy array of test set labels
+            model: Estimator (ML model, Pipeline, GridSearchCV) with a .predict method
+            category_names: list of string holding the category names
+
+        Returns
+            prints classification_report
+            classification_report
     """
 
     y_pred = model.predict(X_test)
@@ -105,24 +140,19 @@ def evaluate_model(model, x_test, y_test, category_names):
     print(report)
     return report
 
-    # y_pred = model.predict(x_test)
-    #
-    # f1_scores = []
-    # for i, _ in enumerate(y_test):
-    #     f1_scores.append(f1_score(y_test[:, i-1], y_pred[:, i-1], zero_division=1))
-    #
-    # min_f1 = np.min(f1_scores)
-    # avg_f1 = np.mean(f1_scores)
-    # max_f1 = np.max(f1_scores)
-    #
-    # print('Trained Model\n\tMin f1 score - {}\n\tAvg f1 score - {}\n\tMax f1 score - {}'.format(min_f1, avg_f1, max_f1))
-    # print("\nBest Parameters:", model.best_params_)
-
 
 def save_model(model, model_filepath):
-    pickle.dump(model, open(model_filepath, 'wb'))
+    """
+    Saves Estimator object into a python pickle file
 
-    pass
+        Parameters
+            model: Estimator (ML model, Pipeline, GridSearchCV)
+            model_filepath: str location to save the file to
+
+        Returns
+            None (saved pickle file)
+    """
+    pickle.dump(model, open(model_filepath, 'wb'))
 
 
 # def run_pipeline(data_file):
@@ -144,7 +174,7 @@ sub_set = int(len(X)*1)
 X_reduced = X[:sub_set]
 y_reduced = y[:sub_set]
 
-X_train, X_test, y_train, y_test = train_test_split(X_reduced, y_reduced)
+X_train, X_test, y_train, y_test = train_test_split(X, y)
 
 
 pipeline_svm = build_model()
@@ -158,6 +188,8 @@ print(y_train.size)
 print(len(y_train))
 
 print(pipeline_svm.best_estimator_.steps)
+
+print(pipeline_svm.best_estimator_)
 
 evaluate_model(pipeline_svm, X_test, y_test, categories)
 
