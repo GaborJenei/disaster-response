@@ -1,7 +1,5 @@
 # disaster-response
-ETL &amp; ML Pipeline to classify messages related to disasters
-
-The README file includes a summary of the project, how to run the Python scripts and web app, and an explanation of the files in the repository. Comments are used effectively and each function has a docstring.
+ETL &amp; ML Pipeline to classify messages related to disasters.
 
 The intention and motivation is to help essential disaster response services to filter through a myriad of messages identifying the relevant one.
 
@@ -12,6 +10,25 @@ The processed text data and corresponding disaster categories are used to train 
 The final output is a web app, that lets the user to input a message and instantly get a possible category based on training data.
 
 The mean accuracy score (f1 score) for all categories is ???.
+
+Sections:
+- [App Gallery](##App Gallery)
+- [Pipeline Process](#Pipeline Process)
+    - [Data](##Data)
+    - [Cleaning and Processing](##Cleaning and Processing)  
+    - [Classifier](##Classifier)
+    
+- [User Guide](#User Guide)
+    - [Installation](##Installation)
+    - [Usage](##Usage)
+
+- [File Descriptions](##File Descriptions)  
+- [Licensing, Authors, Acknowledgements](##Licensing, Authors, Acknowledgements)  
+- [Packages used](##Packages used)
+
+
+## App Gallery
+
 
 # Pipeline Process
 ## Data
@@ -35,7 +52,7 @@ The Categories:
 > 'infrastructure_related', 'transport', 'buildings', 'electricity', 'tools', 'hospitals', 'shops', 'aid_centers',
 > 'other_infrastructure', 'weather_related', 'floods', 'storm', 'fire', 'earthquake', 'cold', 'other_weather', 'direct_report'
 
-## Cleaning & Processing
+## Cleaning and Processing
 Text data is challenging, the cleaning process and tokenization were refined to achieve a better model performance
 __Cleaning__
 - Remove duplicates
@@ -82,7 +99,7 @@ At the same time GridSearchCV methodically trains avery possible combinations of
 # User Guide
 ## Installation
 - Download or clone this repository to your local machine
-- (optional) create a new virtual environment if you wish to do so and activate it (here's the details with [conda](https://docs.conda.io/projects/conda/en/4.6.1/user-guide/tasks/manage-environments.html) and [pip](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/))
+- (optional) create a new virtual environment if you wish to do so and activate it (here are the details with [conda](https://docs.conda.io/projects/conda/en/4.6.1/user-guide/tasks/manage-environments.html) and [pip](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/))
 - Install the dependencies from this repository requirements.txt
     - Conda: `conda install --file requirements.txt`
     - Pip: `pip install -r requirements.txt`
@@ -95,7 +112,8 @@ At the same time GridSearchCV methodically trains avery possible combinations of
 
 ## File Descriptions
 
-# Licensing, Authors, Acknowledgements, etc.
+## Licensing, Authors, Acknowledgements, etc.  
+
 ## Packages used
 Libraries required for the app to run are listed in the requirement.txt file
 - Pandas
