@@ -1,6 +1,7 @@
 import sys
 import pandas as pd
 import sqlalchemy
+from langdetect import DetectorFactory, detect
 
 
 def load_data(messages_filepath, categories_filepath):
@@ -71,6 +72,19 @@ def clean_data(df):
     # drop duplicates
     df_out.drop_duplicates(inplace=True)
 
+    # append language
+    # Set seed to get the same language prediction for every run, obviously it'll be 42
+    DetectorFactory.seed = 42
+
+    def detect_language(text):
+        try:
+            lang = detect(text)
+            return lang
+        except:
+            return 'Unknown'
+
+    df_out['message language'] = df_out['message'].apply(detect_language)
+
     return df_out
 
 
@@ -106,12 +120,12 @@ def main():
 
         print('Cleaning data...')
         df = clean_data(df)
-        
+
         print('Saving data...\n    DATABASE: {}'.format(database_filepath))
         save_data(df, database_filepath)
-        
+
         print('Cleaned data saved to database!')
-    
+
     else:
         print('Please provide the filepath of the messages and categories '
               'datasets as the first and second argument respectively, as '

@@ -1,4 +1,5 @@
 import pickle
+import sys
 import time
 
 import numpy as np
@@ -93,7 +94,7 @@ def build_model():
                   'clf__estimator__C': [0.5, 1.0, 2.5, 5]
                   }
 
-    pipeline_svm_cv = GridSearchCV(pipeline, param_grid=parameters, scoring='f1_micro', cv=3, verbose=3)
+    pipeline_svm_cv = GridSearchCV(pipeline, param_grid=parameters, scoring='f1_micro', cv=3, verbose=4)
 
     return pipeline_svm_cv
 
@@ -155,13 +156,13 @@ def save_model(model, model_filepath):
     pickle.dump(model, open(model_filepath, 'wb'))
 
 
-# def run_pipeline(data_file):
-#     X, y = load_data(data_file)  # run ETL pipeline
-#     model = build_model()  # build model pipeline
-#     model = train(X, y, model)  # train model pipeline
-#     export_model(model)  # save model
-#
-#
+def run_pipeline(data_file):
+    X, y = load_data(data_file)  # run ETL pipeline
+    model = build_model()  # build model pipeline
+    model = train(X, y, model)  # train model pipeline
+    save_model(model)  # save model
+
+
 # if __name__ == '__main__':
 #     data_file = sys.argv[1]  # get filename of dataset
 #     run_pipeline(data_file)  # run data pipeline
@@ -170,7 +171,7 @@ def save_model(model, model_filepath):
 X, y, categories = load_data('disaster_response.db')
 
 # try to push it through 20% of the data?
-sub_set = int(len(X)*1)
+sub_set = int(len(X)*0.1)
 X_reduced = X[:sub_set]
 y_reduced = y[:sub_set]
 
@@ -190,9 +191,12 @@ print(len(y_train))
 print(pipeline_svm.best_estimator_.steps)
 
 print(pipeline_svm.best_estimator_)
-
+print('\n')
+print(pipeline_svm.best_params_)
+print('\n')
 evaluate_model(pipeline_svm, X_test, y_test, categories)
 
+save_model(pipeline_svm, 'saved_model.pkl')
 
 end_time = time.time()
 print(end_time-start_time)
