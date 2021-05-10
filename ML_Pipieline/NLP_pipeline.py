@@ -1,12 +1,11 @@
 import re
 
 import pandas as pd
-from nltk import SnowballStemmer
-from sklearn import preprocessing
 from sklearn.base import BaseEstimator, TransformerMixin
-from nltk.tokenize import word_tokenize, TweetTokenizer
+from nltk.tokenize import word_tokenize
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import stopwords
+from nltk import SnowballStemmer
 
 
 def tokenize(text):

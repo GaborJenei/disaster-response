@@ -53,7 +53,13 @@ def index():
     language_counts = list(messages_by_language.values)
     languages = list(messages_by_language.index)
 
+    categories = ['related', 'request', 'offer', 'aid_related', 'medical_help', 'medical_products', 'search_and_rescue',
+                  'security', 'military', 'water', 'food', 'shelter', 'clothing', 'money', 'missing_people', 'refugees',
+                  'death', 'other_aid', 'infrastructure_related', 'transport', 'buildings', 'electricity', 'tools',
+                  'hospitals', 'shops', 'aid_centers', 'other_infrastructure', 'weather_related', 'floods', 'storm',
+                  'fire', 'earthquake', 'cold', 'other_weather', 'direct_report']
 
+    count_by_category = df[categories].sum()
 
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
@@ -74,6 +80,15 @@ def index():
             'layout': {'title': 'Distribution of Message Languages',
                        'yaxis': {'title': "Count", 'type': "log"},
                        'xaxis': {'title': "Language"}
+                       }
+        },
+
+        # Bar chart by category
+        {
+            'data': [Bar(x=count_by_category.index, y=count_by_category.values)],
+            'layout': {'title': 'Distribution of Message Categories',
+                       'yaxis': {'title': "Count", 'type': "log"},
+                       'xaxis': {'title': "Category"}
                        }
         }
     ]

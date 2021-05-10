@@ -6,24 +6,11 @@ import numpy as np
 import pandas as pd
 import sqlalchemy
 
-# NLP
-import re
-from nltk.tokenize import word_tokenize, TweetTokenizer
-from nltk.stem.wordnet import WordNetLemmatizer
-from nltk.corpus import stopwords
-
 import nltk
-from sklearn.svm import LinearSVC, SVC
 
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
-
-from sklearn.metrics import confusion_matrix, f1_score
+from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split, GridSearchCV
-# from sklearn.ensemble import RandomForestClassifier
 from sklearn.multioutput import MultiOutputClassifier
-from sklearn.neighbors import KNeighborsClassifier
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.metrics import classification_report
@@ -32,6 +19,9 @@ from NLP_pipeline import tokenize, MessageLength
 
 start_time = time.time()
 
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
 
 def load_data(db_filepath):
     """
