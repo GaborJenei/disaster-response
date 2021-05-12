@@ -7,7 +7,7 @@ from nltk.tokenize import word_tokenize
 
 from flask import Flask
 from flask import render_template, request, jsonify
-from plotly.graph_objs import Bar
+from plotly.graph_objs import Bar, Heatmap
 # from sklearn.externals import joblib
 import joblib
 from sqlalchemy import create_engine
@@ -16,18 +16,7 @@ import NLP_pipeline
 
 app = Flask(__name__)
 
-
-# def tokenize(text):
-#     tokens = word_tokenize(text)
-#     lemmatizer = WordNetLemmatizer()
-#
-#     clean_tokens = []
-#     for tok in tokens:
-#         clean_tok = lemmatizer.lemmatize(tok).lower().strip()
-#         clean_tokens.append(clean_tok)
-#
-#     return clean_tokens
-
+# Instantiate the tokenizer
 tokenize = NLP_pipeline.tokenize
 
 # load data
@@ -43,13 +32,11 @@ model = joblib.load("../ML_Pipieline/saved_model.pkl")
 @app.route('/index')
 def index():
     # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
 
     # Bar charts of languages
     messages_by_language = df['message language'].value_counts()
-
     language_counts = list(messages_by_language.values)
     languages = list(messages_by_language.index)
 
@@ -61,19 +48,11 @@ def index():
 
     count_by_category = df[categories].sum()
 
-    # create visuals
-    # TODO: Below is an example - modify to create your own visuals
-    graphs = [
-        # Bar chart by genre
-        {
-            'data': [Bar(x=genre_names, y=genre_counts)],
-            'layout': {
-                'title': 'Distribution of Message Genres',
-                'yaxis': {'title': "Count"},
-                'xaxis': {'title': "Genre"}
-            }
-        },
+    # Heatmap data prep
+    count_by_cat_genre = df.groupby(by=['genre'])[categories].sum()
 
+    # create visuals
+    graphs = [
         # Bar chart by language
         {
             'data': [Bar(x=languages, y=language_counts)],
@@ -90,7 +69,28 @@ def index():
                        'yaxis': {'title': "Count", 'type': "log"},
                        'xaxis': {'title': "Category"}
                        }
-        }
+        },
+
+        # Bar chart by category
+        {
+            'data': [Heatmap(z=count_by_cat_genre.values,
+                             x=count_by_cat_genre.columns,
+                             y=count_by_cat_genre.index)],
+            'layout': {'title': 'Distribution of Message Categories by Genre',
+                       'yaxis': {'title': "Genre"},
+                       'xaxis': {'title': "Category"}
+                       }
+        },
+
+        # Bar chart by genre
+        {
+            'data': [Bar(x=genre_names, y=genre_counts)],
+            'layout': {
+                'title': 'Distribution of Message Genres',
+                'yaxis': {'title': "Count"},
+                'xaxis': {'title': "Genre"}
+            }
+        },
     ]
 
     # encode plotly graphs in JSON
@@ -107,8 +107,13 @@ def go():
     # save user input in query
     query = request.args.get('query', '')
 
+    print(query)
+
     # use model to predict classification for query
     classification_labels = model.predict([query])[0]
+
+    print(classification_labels)
+
     classification_results = dict(zip(df.columns[4:], classification_labels))
 
     # This will render the go.html Please see that file. 

@@ -9,7 +9,7 @@ The processed text data and corresponding disaster categories are used to train 
 
 The final output is a web app, that lets the user to input a message and instantly get a possible category based on training data.
 
-The mean accuracy score (f1 score) for all categories is ???.
+The F1 score across all categories is 0.69.
 
 Sections:
 - [App Gallery](##App Gallery)
