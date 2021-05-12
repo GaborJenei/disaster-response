@@ -56,7 +56,7 @@ The Categories:
 Text data is challenging, the cleaning process and tokenization were refined to achieve a better model performance
 __Cleaning__
 - Remove duplicates
-- Remove non English languages
+- Remove non-English languages
 
 ### Feature Extraction
 
@@ -105,15 +105,41 @@ At the same time GridSearchCV methodically trains avery possible combinations of
     - Pip: `pip install -r requirements.txt`
 
 ## Usage
-
-:warning:
-
-## etc.
+1. cd into data folder, run ETL pipeline transforming, cleaning and putting the data into an SQL database:
+    `python process_data.py disaster_messages.csv disaster_categories.csv disaster_response.db`  
+2. cd into ML_Pipeline folder, then run ML pipeline training the classification model and saving it into a pickle file:  
+    `python train_classifier.py disaster_response.db saved_model.pkl`  
+    :warning: Using the full GridSearchCV parameters can take long time even on modern machines  
+3. cd into app folder, then run the web app:  
+    `python run.py`  
+4. Go to http://0.0.0.0:3001/ Alternatively, type http://localhost:3001/ in browser  
 
 ## File Descriptions
+__data/__  
+    _disaster_categories.csv_:  input datafile of categories  
+    _disaster_messages.csv_:    input datafile of messages  
+    _disaster_response.db_:     database of cleaned message data  
+    _process_data.py_:          ETL pipeline extracting from the two csv, transforming, cleaning and loading data into the db  
+__ML_Pipeline/__  
+    _NLP_pipeline.py_:          script file holding tokenizer and message length transformer class  
+    _train_classifier.py_:      ML Pipeline definition and training  
+    _saved_model.pkl_:          saved trained ML model  
+__app/__  
+    _run.py_:                   Flask app, backend of the webapp  
+    _NLP_pipeline.py_:          script file holding tokenizer and message length transformer class  
+    __templates/__
+        _master.html_:          landing page of the web app  
+        _go.html_:              page rendering the classifier output, with form for another message to be classified  
 
-## Licensing, Authors, Acknowledgements, etc.  
+## Licensing, Authors, Acknowledgements 
+- MIT License
+- Thanks for Figure8 for the data
+- Thanks for Udacity for the frame of the web app
 
 ## Packages used
 Libraries required for the app to run are listed in the requirement.txt file
-- Pandas
+- Numpy, Pandas, SQLite, SQLAlchemy
+- langdetect, re (regex), NLTK, Scikit Learn
+- Plotly, Flask
+
+
