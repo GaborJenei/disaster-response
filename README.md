@@ -12,7 +12,6 @@ The final output is a web app, that lets the user to input a message and instant
 The F1 score across all categories is 0.69.
 
 Sections:
-- [App Gallery](#App-Gallery)
 - [Pipeline Process](#Pipeline-Process)
     - [Data](#Data)
     - [Cleaning and Processing](#Cleaning-and-Processing)  
@@ -26,9 +25,13 @@ Sections:
 - [Licensing, Authors, Acknowledgements](#Licensing,-Authors,-Acknowledgements)  
 - [Packages used](#Packages-used)
 
+![Word cloud](https://github.com/GaborJenei/disaster-response/blob/main/.img/wordcloud.png)
+
+
+![Word cloud](https://github.com/GaborJenei/disaster-response/blob/main/.img/wordcloud_disaster.png)
 
 # Pipeline Process  
-![alt text](http://url/to/img.png)
+![pipeline](https://github.com/GaborJenei/disaster-response/blob/main/.img/Disaster-Response-Pipeline.png)
 
 ## Data
 Three randomly selected message and their categories:
