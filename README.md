@@ -131,7 +131,7 @@ The best performing model parameters established using `GridSearchCV`:
         * _master.html_:          landing page of the web app  
         * _go.html_:              page rendering the classifier output, with form for another message to be classified  
 
-## Licensing, Authors, Acknowledgements 
+## Licensing, Authors, Acknowledgements  
 - MIT License
 - Thanks for Figure8 for the data
 - Thanks for Udacity for the frame of the web app
