@@ -22,7 +22,7 @@ Sections:
     - [Usage](#Usage)
 
 - [File Descriptions](#File-Descriptions)  
-- [Licensing, Authors, Acknowledgements](#Licensing,-Authors,-Acknowledgements)  
+- [Licensing, Authors, Acknowledgements](#Licensing-Authors-Acknowledgements)  
 - [Packages used](#Packages-used)
 
 ![Word cloud](https://github.com/GaborJenei/disaster-response/blob/main/.img/wordcloud.png)
