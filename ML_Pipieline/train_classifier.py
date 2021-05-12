@@ -176,7 +176,7 @@ def main():
         save_model(model, model_filepath)
 
         end_time = time.time()
-        print('Trained model saved!\nTraining took {} minutes'.format((end_time - start_time) / 60))
+        print('Trained model saved!\nTraining took {r:1.2f} minutes'.format(r=(end_time - start_time)/60))
 
     else:
         print('Please provide the filepath of the disaster messages database '

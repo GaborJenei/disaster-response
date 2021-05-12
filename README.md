@@ -12,19 +12,19 @@ The final output is a web app, that lets the user to input a message and instant
 The F1 score across all categories is 0.69.
 
 Sections:
-- [App Gallery](##App Gallery)
-- [Pipeline Process](#Pipeline Process)
+- [App Gallery](##App-Gallery)
+- [Pipeline Process](#Pipeline-Process)
     - [Data](##Data)
-    - [Cleaning and Processing](##Cleaning and Processing)  
+    - [Cleaning and Processing](##Cleaning-and-Processing)  
     - [Classifier](##Classifier)
     
-- [User Guide](#User Guide)
+- [User Guide](#User-Guide)
     - [Installation](##Installation)
     - [Usage](##Usage)
 
-- [File Descriptions](##File Descriptions)  
+- [File Descriptions](##File-Descriptions)  
 - [Licensing, Authors, Acknowledgements](##Licensing, Authors, Acknowledgements)  
-- [Packages used](##Packages used)
+- [Packages used](##Packages-used)
 
 
 ## App Gallery
