@@ -115,21 +115,21 @@ At the same time GridSearchCV methodically trains avery possible combinations of
 4. Go to http://0.0.0.0:3001/ Alternatively, type http://localhost:3001/ in browser  
 
 ## File Descriptions
-__data/__  
-    _disaster_categories.csv_:  input datafile of categories  
-    _disaster_messages.csv_:    input datafile of messages  
-    _disaster_response.db_:     database of cleaned message data  
-    _process_data.py_:          ETL pipeline extracting from the two csv, transforming, cleaning and loading data into the db  
-__ML_Pipeline/__  
-    _NLP_pipeline.py_:          script file holding tokenizer and message length transformer class  
-    _train_classifier.py_:      ML Pipeline definition and training  
-    _saved_model.pkl_:          saved trained ML model  
-__app/__  
-    _run.py_:                   Flask app, backend of the webapp  
-    _NLP_pipeline.py_:          script file holding tokenizer and message length transformer class  
-    __templates/__
-        _master.html_:          landing page of the web app  
-        _go.html_:              page rendering the classifier output, with form for another message to be classified  
+* __data/__  
+    * _disaster_categories.csv_:  input datafile of categories  
+    * _disaster_messages.csv_:    input datafile of messages  
+    * _disaster_response.db_:     database of cleaned message data  
+    * _process_data.py_:          ETL pipeline extracting from the two csv, transforming, cleaning and loading data into the db  
+* __ML_Pipeline/__  
+    * _NLP_pipeline.py_:          script file holding tokenizer and message length transformer class  
+    * _train_classifier.py_:      ML Pipeline definition and training  
+    * _saved_model.pkl_:          saved trained ML model  
+* __app/__  
+    * _run.py_:                   Flask app, backend of the webapp  
+    * _NLP_pipeline.py_:          script file holding tokenizer and message length transformer class  
+    * __templates/__
+        * _master.html_:          landing page of the web app  
+        * _go.html_:              page rendering the classifier output, with form for another message to be classified  
 
 ## Licensing, Authors, Acknowledgements 
 - MIT License
