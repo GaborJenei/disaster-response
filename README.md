@@ -27,10 +27,9 @@ Sections:
 - [Packages used](#Packages-used)
 
 
-## App Gallery
+# Pipeline Process  
+![alt text](http://url/to/img.png)
 
-
-# Pipeline Process
 ## Data
 Three randomly selected message and their categories:
 _Message 1:_
@@ -58,8 +57,7 @@ __Cleaning__
 - Remove duplicates
 - Remove non-English languages
 
-### Feature Extraction
-
+### Feature Extraction  
 __Tokenizations__  
 1. Text is normalised to lower case
 2. Cleaning with regex
@@ -79,11 +77,6 @@ Term Frequency — Inverse Document Frequency transformation was applied on the 
 __Word Count__  
 The number of words (scaled to 0-1) of each message was added as an additional feature to improve the model accuracy. 
 
-
-Training Notes
-
-# TODO add a figure of the vocabulary size 
-
 ## Classifier
 Support vector machine classifier was used for this project. 
 The classifier was implemented in scikit-learns Pipeline object with the feature extraction process as a FuatureUnion.
@@ -96,6 +89,10 @@ The parameter space the GridSearchCV searched:
 The degree of the polynomial kernel function was also considered, however it was tested separately, because this parameter is only considered by when `kernel='poly'` and ignored for all other kernels by SVC.
 At the same time GridSearchCV methodically trains avery possible combinations of degree and kernel scaling up the runtimes significantly.
  
+The best performing model parameters established using `GridSearchCV`:
+- `kernel='linear`
+- `C=1`
+
 # User Guide
 ## Installation
 - Download or clone this repository to your local machine
