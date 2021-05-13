@@ -80,3 +80,13 @@ wheel=0.36.2=pyhd3eb1b0_0
 xz=5.2.5=h7b6447c_0
 zlib=1.2.11=h7b6447c_3
 zstd=1.4.9=haebb681_0
+
+plotly~=4.14.3
+numpy~=1.20.1
+pandas~=1.2.4
+joblib~=1.0.1
+flask~=1.1.2
+sqlalchemy~=1.4.7
+nltk~=3.6.1
+scikit-learn~=0.24.1
+langdetect~=1.0.9

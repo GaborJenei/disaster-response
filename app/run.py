@@ -1,14 +1,11 @@
 import json
 import plotly
+import numpy as np
 import pandas as pd
-
-from nltk.stem import WordNetLemmatizer
-from nltk.tokenize import word_tokenize
 
 from flask import Flask
 from flask import render_template, request, jsonify
 from plotly.graph_objs import Bar, Heatmap
-# from sklearn.externals import joblib
 import joblib
 from sqlalchemy import create_engine
 
@@ -109,10 +106,14 @@ def go():
 
     print(query)
 
-    # use model to predict classification for query
-    classification_labels = model.predict([query])[0]
+    # Check for empty strings
+    if len(query.strip())>0:
 
-    print(classification_labels)
+        # use model to predict classification for query
+        classification_labels = model.predict([query])[0]
+
+    else:
+        classification_labels = np.zeros(35, dtype=np.int8)
 
     classification_results = dict(zip(df.columns[4:], classification_labels))
 

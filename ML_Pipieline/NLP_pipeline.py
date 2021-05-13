@@ -5,7 +5,6 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from nltk.tokenize import word_tokenize
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import stopwords
-from nltk import SnowballStemmer
 
 
 def tokenize(text):
@@ -54,10 +53,7 @@ def tokenize(text):
         lemmatized_token = lemmatizer.lemmatize(token)
         lemmatized_tokens.append(lemmatized_token)
 
-    # Stem
-    stemmed_tokens = [SnowballStemmer(language='english').stem(word) for word in lemmatized_tokens]
-
-    return stemmed_tokens
+    return lemmatized_tokens
 
 
 class MessageLength(BaseEstimator, TransformerMixin):

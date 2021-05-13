@@ -28,7 +28,8 @@ Sections:
 ![Word cloud](https://github.com/GaborJenei/disaster-response/blob/main/.img/wordcloud.png)
 
 
-![Word cloud](https://github.com/GaborJenei/disaster-response/blob/main/.img/wordcloud_disaster.png)
+![Screenshot1](https://github.com/GaborJenei/disaster-response/blob/main/.img/Screenshot1.png)
+![Screenshot1](https://github.com/GaborJenei/disaster-response/blob/main/.img/Screenshot2.png)
 
 # Pipeline Process  
 ![pipeline](https://github.com/GaborJenei/disaster-response/blob/main/.img/Disaster-Response-Pipeline.png)
@@ -108,7 +109,7 @@ The best performing model parameters established using `GridSearchCV`:
 1. cd into data folder, run ETL pipeline transforming, cleaning and putting the data into an SQL database:
     `python process_data.py disaster_messages.csv disaster_categories.csv disaster_response.db`  
 2. cd into ML_Pipeline folder, then run ML pipeline training the classification model and saving it into a pickle file:  
-    `python train_classifier.py disaster_response.db saved_model.pkl`  
+    `python train_classifier.py ../data/disaster_response.db saved_model.pkl`  
     :warning: Using the full GridSearchCV parameters can take long time even on modern machines  
 3. cd into app folder, then run the web app:  
     `python run.py`  
